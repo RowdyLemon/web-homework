@@ -2,6 +2,7 @@ import React, { Fragment } from 'react'
 import { useQuery } from '@apollo/client'
 import GetTransactions from '../gql/transactions.gql'
 import { TxTable } from '../components/transactions/TxTable'
+import { AddTransaction } from '../components/AddTransaction'
 
 export function Home () {
   const { loading, error, data = {} } = useQuery(GetTransactions)
@@ -24,6 +25,7 @@ export function Home () {
 
   return (
     <Fragment>
+      <AddTransaction />
       <TxTable data={data.transactions} />
     </Fragment>
   )

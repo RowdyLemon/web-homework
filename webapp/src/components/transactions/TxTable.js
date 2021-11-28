@@ -9,6 +9,7 @@ import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
+import CheckIcon from '@mui/icons-material/Check'
 
 const makeDataTestId = (transactionId, fieldName) => `transaction-${transactionId}-${fieldName}`
 
@@ -40,8 +41,8 @@ export const TxTable = ({ data }) => {
               <TableCell align='right' data-testid={makeDataTestId(tx.id, 'userId')}>{tx.user_id}</TableCell>
               <TableCell align='right' data-testid={makeDataTestId(tx.id, 'description')}>{tx.description}</TableCell>
               <TableCell align='right' data-testid={makeDataTestId(tx.id, 'merchant')}>{tx.merchant_id}</TableCell>
-              <TableCell align='right' data-testid={makeDataTestId(tx.id, 'debit')}>{tx.debit}</TableCell>
-              <TableCell align='right' data-testid={makeDataTestId(tx.id, 'credit')}>{tx.credit}</TableCell>
+              <TableCell align='right' data-testid={makeDataTestId(tx.id, 'debit')}>{tx.debit && <CheckIcon />}</TableCell>
+              <TableCell align='right' data-testid={makeDataTestId(tx.id, 'credit')}>{tx.credit && <CheckIcon />}</TableCell>
               <TableCell align='right' data-testid={makeDataTestId(tx.id, 'amount')}>{tx.amount}</TableCell>
             </TableRow>
           ))}

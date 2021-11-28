@@ -1,58 +1,56 @@
+import { arrayOf } from 'prop-types'
 import React from 'react'
-import { arrayOf, string, bool, number, shape } from 'prop-types'
-import { css } from '@emotion/core'
+import { Transaction } from '../../gql/Transaction'
 
-const styles = css`
- .header {
-   font-weight: bold;
- }
-`
+import Table from '@mui/material/Table'
+import TableBody from '@mui/material/TableBody'
+import TableCell from '@mui/material/TableCell'
+import TableContainer from '@mui/material/TableContainer'
+import TableHead from '@mui/material/TableHead'
+import TableRow from '@mui/material/TableRow'
+import Paper from '@mui/material/Paper'
 
 const makeDataTestId = (transactionId, fieldName) => `transaction-${transactionId}-${fieldName}`
 
-export function TxTable ({ data }) {
+export const TxTable = ({ data }) => {
   return (
-    <table css={styles}>
-      <tbody>
-        <tr className='header'>
-          <td >ID</td>
-          <td >User ID</td>
-          <td >Description</td>
-          <td >Merchant ID</td>
-          <td >Debit</td>
-          <td >Credit</td>
-          <td >Amount</td>
-        </tr>
-        {
-          data.map(tx => {
-            const { id, user_id: userId, description, merchant_id: merchantId, debit, credit, amount } = tx
-            return (
-              <tr data-testid={`transaction-${id}`} key={`transaction-${id}`}>
-                <td data-testid={makeDataTestId(id, 'id')}>{id}</td>
-                <td data-testid={makeDataTestId(id, 'userId')}>{userId}</td>
-                <td data-testid={makeDataTestId(id, 'description')}>{description}</td>
-                <td data-testid={makeDataTestId(id, 'merchant')}>{merchantId}</td>
-                <td data-testid={makeDataTestId(id, 'debit')}>{debit}</td>
-                <td data-testid={makeDataTestId(id, 'credit')}>{credit}</td>
-                <td data-testid={makeDataTestId(id, 'amount')}>{amount}</td>
-              </tr>
-            )
-          })
-        }
-      </tbody>
-    </table>
-
+    <TableContainer component={Paper}>
+      <Table aria-label='simple table' sx={{ minWidth: 650 }}>
+        <TableHead>
+          <TableRow>
+            <TableCell>ID</TableCell>
+            <TableCell align='right'>User ID</TableCell>
+            <TableCell align='right'>Description</TableCell>
+            <TableCell align='right'>Merchant ID</TableCell>
+            <TableCell align='right'>Debit</TableCell>
+            <TableCell align='right'>Credit</TableCell>
+            <TableCell align='right'>Amount</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {data.map((tx) => (
+            <TableRow
+              data-testid={`transaction-${tx.id}`}
+              key={`transaction-${tx.id}`}
+              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+            >
+              <TableCell component='th' data-testid={makeDataTestId(tx.id, 'id')} scope='row'>
+                {tx.id}
+              </TableCell>
+              <TableCell align='right' data-testid={makeDataTestId(tx.id, 'userId')}>{tx.user_id}</TableCell>
+              <TableCell align='right' data-testid={makeDataTestId(tx.id, 'description')}>{tx.description}</TableCell>
+              <TableCell align='right' data-testid={makeDataTestId(tx.id, 'merchant')}>{tx.merchant_id}</TableCell>
+              <TableCell align='right' data-testid={makeDataTestId(tx.id, 'debit')}>{tx.debit}</TableCell>
+              <TableCell align='right' data-testid={makeDataTestId(tx.id, 'credit')}>{tx.credit}</TableCell>
+              <TableCell align='right' data-testid={makeDataTestId(tx.id, 'amount')}>{tx.amount}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
   )
 }
 
 TxTable.propTypes = {
-  data: arrayOf(shape({
-    id: string,
-    user_id: string,
-    description: string,
-    merchant_id: string,
-    debit: bool,
-    credit: bool,
-    amount: number
-  }))
+  data: arrayOf(Transaction.shape)
 }

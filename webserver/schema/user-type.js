@@ -16,8 +16,8 @@ const UserType = new GraphQLObjectType({
   fields: () => ({
     id: { type: GraphQLString },
     dob: { type: GraphQLString },
-    firstName: { type: GraphQLString },
-    lastName: { type: GraphQLString },
+    first_name: { type: GraphQLString },
+    last_name: { type: GraphQLString },
     transactions: {
       type: new GraphQLList(TransactionType),
       resolve (parentValue, args) {

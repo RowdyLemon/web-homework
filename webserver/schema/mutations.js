@@ -3,6 +3,9 @@ const { GraphQLObjectType, GraphQLString, GraphQLBoolean, GraphQLFloat } = graph
 const { TransactionModel } = require('../data-models/Transaction')
 const TransactionType = require('./transaction-type')
 
+const { UserModel } = require('../data-models/User')
+const UserType = require('./user-type')
+
 const mutation = new GraphQLObjectType({
   name: 'Mutation',
   fields: {
@@ -19,6 +22,18 @@ const mutation = new GraphQLObjectType({
       /* eslint-disable-next-line camelcase */
       resolve (parentValue, { user_id, description, merchant_id, debit, credit, amount }) {
         return (new TransactionModel({ user_id, description, merchant_id, debit, credit, amount })).save()
+      }
+    },
+    addUser: {
+      type: UserType,
+      args: {
+        first_name: { type: GraphQLString },
+        last_name: { type: GraphQLString },
+        dob: { type: GraphQLString }
+      },
+      // eslint-disable-next-line camelcase
+      resolve (parentValue, { first_name, last_name, dob }) {
+        return (new UserModel({ first_name, last_name, dob })).save()
       }
     }
   }

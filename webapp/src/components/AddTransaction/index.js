@@ -28,6 +28,7 @@ export const AddTransaction = () => {
   const [selectedMerchant, setSelectedMerchant] = useState({ value: '' })
   const [selectedTransactionType, setSelectedTransactionType] = useState('')
   const [amount, setAmount] = useState('')
+  const [invalidInput, setInvalidInput] = useState(false)
 
   const usersQuery = useQuery(GetUsers)
   const merchantsQuery = useQuery(GetMerchants)
@@ -39,6 +40,7 @@ export const AddTransaction = () => {
     setSelectedTransactionType('')
     setAmount('')
     setOpen(false)
+    setInvalidInput(false)
   }
 
   const [createTransaction] = useMutation(CreateTransaction, {
@@ -69,60 +71,6 @@ export const AddTransaction = () => {
     setOpen(open)
   }
 
-  const list = () => (
-    <Box
-      role='presentation'
-      sx={{ width: 300 }}
-    >
-      <Typography component='h2' sx={{ m: 2 }} variant='h5'>Add Transaction</Typography>
-      <Divider />
-      {usersQuery.loading
-        ? <Box sx={{ m: 2 }}><CircularProgress /></Box>
-        : (
-          <OptionSelect
-            label='User'
-            onSelect={setSelectedUser}
-            options={usersQuery.data.users.map(user => ({ value: `${user.first_name} ${user.last_name}`, id: user.id }))}
-            selectedOption={selectedUser.value}
-          />
-        )
-      }
-      <DescriptionField onChange={event => setDescription(event.target.value)} value={description} />
-      {merchantsQuery.loading
-        ? <Box sx={{ m: 2 }}><CircularProgress /></Box>
-        : (
-          <OptionSelect
-            label='Merchant'
-            onSelect={setSelectedMerchant}
-            options={merchantsQuery.data.merchants.map(merchant => ({ value: merchant.name, id: merchant.id }))}
-            selectedOption={selectedMerchant.value}
-          />
-        )
-      }
-      <TransactionTypeSelect onChange={event => setSelectedTransactionType(event.target.value)} value={selectedTransactionType} />
-      <AmountField onChange={event => setAmount(event.target.value)} value={amount} />
-      <Button
-        onClick={() => {
-          // TODO: handle validation
-          createTransaction({
-            variables: {
-              user_id: selectedUser.id,
-              description,
-              merchant_id: selectedMerchant.id,
-              debit: selectedTransactionType === 'Debit',
-              credit: selectedTransactionType === 'Credit',
-              amount: parseFloat(amount)
-            }
-          })
-        }}
-        sx={{ m: 2 }}
-        variant='contained'
-      >
-        Create
-      </Button>
-    </Box>
-  )
-
   return (
     <div>
       <Tooltip sx={{ mb: 1 }} title='Add Transaction'>
@@ -138,7 +86,75 @@ export const AddTransaction = () => {
         onClose={() => toggleDrawer(false)}
         open={open}
       >
-        {list()}
+        <Box
+          role='presentation'
+          sx={{ width: 300 }}
+        >
+          <Typography component='h2' sx={{ m: 2 }} variant='h5'>Add Transaction</Typography>
+          <Divider />
+          {usersQuery.loading
+            ? <Box sx={{ m: 2 }}><CircularProgress /></Box>
+            : (
+              <OptionSelect
+                error={invalidInput && !selectedUser.value}
+                label='User'
+                onSelect={setSelectedUser}
+                options={usersQuery.data.users.map(user => ({ value: `${user.first_name} ${user.last_name}`, id: user.id }))}
+                selectedOption={selectedUser.value}
+              />
+            )
+          }
+          <DescriptionField
+            error={invalidInput && !description}
+            onChange={event => setDescription(event.target.value)}
+            value={description}
+          />
+          {merchantsQuery.loading
+            ? <Box sx={{ m: 2 }}><CircularProgress /></Box>
+            : (
+              <OptionSelect
+                error={invalidInput && !selectedMerchant.value}
+                label='Merchant'
+                onSelect={setSelectedMerchant}
+                options={merchantsQuery.data.merchants.map(merchant => ({ value: merchant.name, id: merchant.id }))}
+                selectedOption={selectedMerchant.value}
+              />
+            )
+          }
+          <TransactionTypeSelect
+            error={invalidInput && !selectedTransactionType}
+            onChange={event => setSelectedTransactionType(event.target.value)}
+            value={selectedTransactionType}
+          />
+          <AmountField
+            error={invalidInput && !amount}
+            onChange={event => setAmount(event.target.value)}
+            value={amount}
+          />
+          <Button
+            onClick={() => {
+              if (!selectedUser.value || !description || !selectedMerchant.value || !selectedTransactionType || !amount) {
+                setInvalidInput(true)
+                return
+              }
+
+              createTransaction({
+                variables: {
+                  user_id: selectedUser.id,
+                  description,
+                  merchant_id: selectedMerchant.id,
+                  debit: selectedTransactionType === 'Debit',
+                  credit: selectedTransactionType === 'Credit',
+                  amount: parseFloat(amount)
+                }
+              })
+            }}
+            sx={{ m: 2 }}
+            variant='contained'
+          >
+            Create
+          </Button>
+        </Box>
       </Drawer>
     </div>
   )

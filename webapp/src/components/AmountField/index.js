@@ -4,14 +4,15 @@ import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel'
 import OutlinedInput from '@mui/material/OutlinedInput'
 import InputAdornment from '@mui/material/InputAdornment'
-import { func, string } from 'prop-types'
+import { bool, func, string } from 'prop-types'
 
-export const AmountField = ({ onChange, value }) => {
+export const AmountField = ({ onChange, value, error }) => {
   return (
     <Box sx={{ m: 2 }}>
       <FormControl fullWidth>
         <InputLabel htmlFor='outlined-adornment-amount'>Amount</InputLabel>
         <OutlinedInput
+          error={error}
           id='outlined-adornment-amount'
           label='Amount'
           onChange={onChange}
@@ -27,5 +28,6 @@ export const AmountField = ({ onChange, value }) => {
 
 AmountField.propTypes = {
   onChange: func,
-  value: string
+  value: string,
+  error: bool
 }

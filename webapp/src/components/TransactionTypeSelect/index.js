@@ -4,13 +4,13 @@ import RadioGroup from '@mui/material/RadioGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import FormControl from '@mui/material/FormControl'
 import FormLabel from '@mui/material/FormLabel'
-import { func, string } from 'prop-types'
+import { bool, func, string } from 'prop-types'
 import Box from '@mui/material/Box'
 
-export const TransactionTypeSelect = ({ onChange, value }) => {
+export const TransactionTypeSelect = ({ onChange, value, error }) => {
   return (
     <Box sx={{ m: 2 }}>
-      <FormControl component='fieldset'>
+      <FormControl component='fieldset' error={error}>
         <FormLabel component='legend'>Transaction Type</FormLabel>
         <RadioGroup
           aria-label='Transaction Type'
@@ -28,5 +28,6 @@ export const TransactionTypeSelect = ({ onChange, value }) => {
 
 TransactionTypeSelect.propTypes = {
   onChange: func,
-  value: string
+  value: string,
+  error: bool
 }

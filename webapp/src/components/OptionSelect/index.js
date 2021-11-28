@@ -4,16 +4,16 @@ import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import Select from '@mui/material/Select'
-import { func, arrayOf, string, shape } from 'prop-types'
+import { func, arrayOf, string, shape, bool } from 'prop-types'
 
-export const OptionSelect = ({ onSelect, options, selectedOption, label }) => {
+export const OptionSelect = ({ onSelect, options, selectedOption, label, error }) => {
   const handleSelect = event => {
     onSelect(options.find(option => option.value === event.target.value))
   }
 
   return (
     <Box sx={{ m: 2 }}>
-      <FormControl fullWidth>
+      <FormControl error={error} fullWidth>
         <InputLabel>{label}</InputLabel>
         <Select
           label={label}
@@ -39,5 +39,6 @@ OptionSelect.propTypes = {
     id: string
   })),
   label: string,
-  selectedOption: string
+  selectedOption: string,
+  error: bool
 }

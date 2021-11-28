@@ -1,3 +1,4 @@
+import { AlertManager } from './components/AlertManager'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import { css } from '@emotion/core'
 import { Header } from './components/Header'
@@ -9,8 +10,10 @@ function AppRouter () {
     <Router>
       <Header />
       <div css={contentStyle}>
-        <Route component={Home} exact path='/' />
-        <Route component={() => (<div>Content for /another route</div>)} exact path='/another' />
+        <AlertManager>
+          <Route component={Home} exact path='/' />
+          <Route component={() => (<div>Content for /another route</div>)} exact path='/another' />
+        </AlertManager>
       </div>
     </Router>
   )

@@ -1,4 +1,5 @@
 import AddIcon from '@mui/icons-material/Add'
+import { AlertManagerContext } from '../AlertManager'
 import CreateTransaction from '../../gql/mutations.gql'
 import { AmountField } from '../AmountField'
 import Box from '@mui/material/Box'
@@ -12,13 +13,15 @@ import GetTransactions from '../../gql/transactions.gql'
 import GetUsers from '../../gql/users.gql'
 import IconButton from '@mui/material/IconButton'
 import { OptionSelect } from '../OptionSelect'
-import React, { Fragment, useState } from 'react'
+import React, { useState, useContext } from 'react'
 import Tooltip from '@mui/material/Tooltip'
 import { TransactionTypeSelect } from '../TransactionTypeSelect'
 import Typography from '@mui/material/Typography'
 import { useQuery, useMutation } from '@apollo/client'
 
 export const AddTransaction = () => {
+  const { setOnFailure, setOnSuccess } = useContext(AlertManagerContext)
+
   const [open, setOpen] = useState(false)
   const [selectedUser, setSelectedUser] = useState({ value: '' })
   const [description, setDescription] = useState('')
@@ -49,15 +52,17 @@ export const AddTransaction = () => {
         data: transactions
       })
     },
-    onCompleted: resetState
+    onCompleted: () => {
+      setOnSuccess('Successfully created transaction')
+      resetState()
+    },
+    onError: () => setOnFailure('Failed to create transaction, please try again later.')
   })
 
   if (usersQuery.error || merchantsQuery.error) {
-    return (
-      <Fragment>
-        ¯\_(ツ)_/¯
-      </Fragment>
-    )
+    setOnFailure('Failed to fetch data needed to create transactions, please try again later.')
+    resetState()
+    return
   }
 
   const toggleDrawer = (open) => {

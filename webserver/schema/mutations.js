@@ -6,6 +6,9 @@ const TransactionType = require('./transaction-type')
 const { UserModel } = require('../data-models/User')
 const UserType = require('./user-type')
 
+const { MerchantModel } = require('../data-models/Merchant')
+const MerchantType = require('./merchant-type')
+
 const mutation = new GraphQLObjectType({
   name: 'Mutation',
   fields: {
@@ -34,6 +37,15 @@ const mutation = new GraphQLObjectType({
       // eslint-disable-next-line camelcase
       resolve (parentValue, { first_name, last_name, dob }) {
         return (new UserModel({ first_name, last_name, dob })).save()
+      }
+    },
+    addMerchant: {
+      type: MerchantType,
+      args: {
+        name: { type: GraphQLString }
+      },
+      resolve (parentValue, { name }) {
+        return (new MerchantModel({ name })).save()
       }
     }
   }

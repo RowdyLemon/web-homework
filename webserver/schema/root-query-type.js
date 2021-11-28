@@ -5,6 +5,9 @@ const Transactions = require('../query-resolvers/transaction-resolvers.js')
 const UserType = require('./user-type')
 const Users = require('../query-resolvers/user-resolvers.js')
 
+const MerchantType = require('./merchant-type')
+const Merchants = require('../query-resolvers/merchant-resolver.js')
+
 const {
   GraphQLBoolean,
   GraphQLFloat,
@@ -56,6 +59,24 @@ const RootQuery = new GraphQLObjectType({
       },
       resolve (parentValue, args) {
         return Users.find(args)
+      }
+    },
+    merchant: {
+      type: MerchantType,
+      args: {
+        id: { type: GraphQLString }
+      },
+      resolve (parentValue, args) {
+        return Merchants.findOne(args.id)
+      }
+    },
+    merchants: {
+      type: GraphQLList(MerchantType),
+      args: {
+        name: { type: GraphQLString }
+      },
+      resolve (parentValue, args) {
+        return Merchants.find(args)
       }
     }
   })

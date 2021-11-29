@@ -5,6 +5,8 @@ import { CSVUpload } from './csv_upload'
 import { Header } from './components/Header'
 import { Home } from './home'
 import React from 'react'
+import { Settings } from './settings'
+import { SettingsManager } from './components/SettingsManager'
 
 function AppRouter () {
   return (
@@ -12,9 +14,12 @@ function AppRouter () {
       <Header />
       <div css={contentStyle}>
         <AlertManager>
-          <Route component={Home} exact path='/' />
-          <Route component={() => (<div>Content for /another route</div>)} exact path='/another' />
-          <Route component={CSVUpload} exact path='/csv_upload' />
+          <SettingsManager>
+            <Route component={Home} exact path='/' />
+            <Route component={() => (<div>Content for /another route</div>)} exact path='/another' />
+            <Route component={CSVUpload} exact path='/csv_upload' />
+            <Route component={Settings} exact path='/settings' />
+          </SettingsManager>
         </AlertManager>
       </div>
     </Router>

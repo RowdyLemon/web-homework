@@ -18,8 +18,8 @@ export const TransactionTypeSelect = ({ onChange, value, error }) => {
           onChange={onChange}
           value={value}
         >
-          <FormControlLabel control={<Radio />} label='Debit' value='Debit' />
-          <FormControlLabel control={<Radio />} label='Credit' value='Credit' />
+          <FormControlLabel control={<Radio data-testid='debit-radio-button' />} label='Debit' value='Debit' />
+          <FormControlLabel control={<Radio data-testid='credit-radio-button' />} label='Credit' value='Credit' />
         </RadioGroup>
       </FormControl>
     </Box>

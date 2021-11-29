@@ -25,6 +25,15 @@ const transactionInputType = new graphql.GraphQLInputObjectType({
   }
 })
 
+const userInputType = new graphql.GraphQLInputObjectType({
+  name: 'userInput',
+  fields: {
+    first_name: { type: GraphQLString },
+    last_name: { type: GraphQLString },
+    dob: { type: GraphQLString }
+  }
+})
+
 const mutation = new GraphQLObjectType({
   name: 'Mutation',
   fields: {
@@ -97,6 +106,15 @@ const mutation = new GraphQLObjectType({
       },
       resolve (parentValue, { first_name, last_name, dob }) {
         return (new UserModel({ first_name, last_name, dob })).save()
+      }
+    },
+    addUsers: {
+      type: new graphql.GraphQLList(UserType),
+      args: {
+        users: { type: new graphql.GraphQLList(userInputType) }
+      },
+      resolve (parentValue, { users }) {
+        return UserModel.insertMany(users).then(result => packageModel(result))
       }
     },
     addMerchant: {

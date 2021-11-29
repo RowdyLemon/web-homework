@@ -34,6 +34,13 @@ const userInputType = new graphql.GraphQLInputObjectType({
   }
 })
 
+const merchantInputType = new graphql.GraphQLInputObjectType({
+  name: 'merchantInput',
+  fields: {
+    name: { type: GraphQLString }
+  }
+})
+
 const mutation = new GraphQLObjectType({
   name: 'Mutation',
   fields: {
@@ -124,6 +131,15 @@ const mutation = new GraphQLObjectType({
       },
       resolve (parentValue, { name }) {
         return (new MerchantModel({ name })).save()
+      }
+    },
+    addMerchants: {
+      type: new graphql.GraphQLList(MerchantType),
+      args: {
+        merchants: { type: new graphql.GraphQLList(merchantInputType) }
+      },
+      resolve (parentValue, { merchants }) {
+        return MerchantModel.insertMany(merchants).then(result => packageModel(result))
       }
     }
   }

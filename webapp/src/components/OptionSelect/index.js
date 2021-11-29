@@ -8,7 +8,7 @@ import { func, arrayOf, string, shape, bool } from 'prop-types'
 
 export const OptionSelect = ({ onSelect, options, selectedOption, label, error }) => {
   const handleSelect = event => {
-    onSelect(options.find(option => option.value === event.target.value))
+    onSelect(options.find(option => option.value === event.target.value).id)
   }
 
   return (
@@ -19,7 +19,7 @@ export const OptionSelect = ({ onSelect, options, selectedOption, label, error }
           label={label}
           onChange={handleSelect}
           required
-          value={selectedOption}
+          value={options.find(option => option.id === selectedOption)?.value || ''}
         >
           {
             options.map(option => (

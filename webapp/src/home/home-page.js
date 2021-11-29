@@ -1,6 +1,6 @@
 import { AlertManagerContext } from '../components/AlertManager'
 import CircularProgress from '@mui/material/CircularProgress'
-import React, { Fragment, useContext } from 'react'
+import React, { Fragment, useContext, useState } from 'react'
 import { useQuery, useMutation } from '@apollo/client'
 import GetTransactions from '../gql/transactions.gql'
 import { TxTable } from '../components/transactions/TxTable'
@@ -9,6 +9,8 @@ import { DELETE_TRANSACTION } from '../gql/Mutations'
 
 export function Home () {
   const { setOnFailure, setOnSuccess } = useContext(AlertManagerContext)
+
+  const [editTransaction, setEditTransaction] = useState(null)
 
   const [deleteTransaction] = useMutation(DELETE_TRANSACTION, {
     update: (cache, result) => {
@@ -37,8 +39,12 @@ export function Home () {
 
   return (
     <Fragment>
-      <AddTransaction />
-      <TxTable data={data.transactions} onDelete={deleteTransaction} />
+      <AddTransaction setTransaction={setEditTransaction} transaction={editTransaction} />
+      <TxTable
+        data={data.transactions}
+        onDelete={deleteTransaction}
+        onEdit={setEditTransaction}
+      />
     </Fragment>
   )
 }

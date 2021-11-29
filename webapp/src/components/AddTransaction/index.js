@@ -1,7 +1,9 @@
+/* eslint-disable camelcase */
 import AddIcon from '@mui/icons-material/Add'
 import { AlertManagerContext } from '../AlertManager'
-import { CREATE_TRANSACTION } from '../../gql/Mutations'
+import { CREATE_TRANSACTION, UPDATE_TRANSACTION } from '../../gql/Mutations'
 import { AmountField } from '../AmountField'
+import { bool, func, number, shape, string } from 'prop-types'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import CircularProgress from '@mui/material/CircularProgress'
@@ -13,52 +15,91 @@ import GetTransactions from '../../gql/transactions.gql'
 import GetUsers from '../../gql/users.gql'
 import IconButton from '@mui/material/IconButton'
 import { OptionSelect } from '../OptionSelect'
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import Tooltip from '@mui/material/Tooltip'
 import { TransactionTypeSelect } from '../TransactionTypeSelect'
 import Typography from '@mui/material/Typography'
 import { useQuery, useMutation } from '@apollo/client'
 
-export const AddTransaction = () => {
+const getTransactionType = transaction => {
+  if (transaction?.debit) {
+    return 'Debit'
+  }
+  if (transaction?.credit) {
+    return 'Credit'
+  }
+  return ''
+}
+
+export const AddTransaction = ({ transaction, setTransaction }) => {
   const { setOnFailure, setOnSuccess } = useContext(AlertManagerContext)
 
-  const [open, setOpen] = useState(false)
-  const [selectedUser, setSelectedUser] = useState({ value: '' })
-  const [description, setDescription] = useState('')
-  const [selectedMerchant, setSelectedMerchant] = useState({ value: '' })
-  const [selectedTransactionType, setSelectedTransactionType] = useState('')
-  const [amount, setAmount] = useState('')
+  const [open, setOpen] = useState(!!transaction)
+  const [selectedUserId, setSelectedUserId] = useState(transaction?.user_id)
+  const [description, setDescription] = useState(transaction?.description || '')
+  const [selectedMerchantId, setSelectedMerchantId] = useState(transaction?.merchant_id)
+  const [selectedTransactionType, setSelectedTransactionType] = useState(getTransactionType(transaction))
+  const [amount, setAmount] = useState(transaction?.amount || '')
   const [invalidInput, setInvalidInput] = useState(false)
+
+  useEffect(() => {
+    setOpen(!!transaction)
+    setSelectedUserId(transaction?.user_id)
+    setDescription(transaction?.description || '')
+    setSelectedMerchantId(transaction?.merchant_id)
+    setSelectedTransactionType(getTransactionType(transaction))
+    setAmount(transaction?.amount || '')
+  }, [transaction])
 
   const usersQuery = useQuery(GetUsers)
   const merchantsQuery = useQuery(GetMerchants)
 
   const resetState = () => {
-    setSelectedUser({ value: '' })
+    setSelectedUserId(null)
     setDescription('')
-    setSelectedMerchant({ value: '' })
+    setSelectedMerchantId(null)
     setSelectedTransactionType('')
     setAmount('')
     setOpen(false)
     setInvalidInput(false)
+    setTransaction(null)
   }
 
   const [createTransaction] = useMutation(CREATE_TRANSACTION, {
     update: (cache, result) => {
       const newTransaction = result.data.addTransaction
-      const transactions = JSON.parse(JSON.stringify(cache.readQuery({ query: GetTransactions })))
+      const data = JSON.parse(JSON.stringify(cache.readQuery({ query: GetTransactions })))
 
-      transactions.transactions.push(newTransaction)
+      data.transactions.push(newTransaction)
       cache.writeQuery({
         query: GetTransactions,
-        data: transactions
+        data
       })
     },
     onCompleted: () => {
-      setOnSuccess('Successfully created transaction')
+      setOnSuccess('Successfully created transaction.')
       resetState()
     },
     onError: () => setOnFailure('Failed to create transaction, please try again later.')
+  })
+
+  const [updateTransaction] = useMutation(UPDATE_TRANSACTION, {
+    update: (cache, result) => {
+      const transaction = result.data.updateTransaction
+      const data = JSON.parse(JSON.stringify(cache.readQuery({ query: GetTransactions })))
+
+      const index = data.transactions.findIndex(t => t.id === transaction.id)
+      data.transactions[index] = transaction
+      cache.writeQuery({
+        query: GetTransactions,
+        data
+      })
+    },
+    onCompleted: () => {
+      setOnSuccess('Successfully updated transaction.')
+      resetState()
+    },
+    onError: () => setOnFailure('Failed to update transaction, please try again later.')
   })
 
   if (usersQuery.error || merchantsQuery.error) {
@@ -73,7 +114,7 @@ export const AddTransaction = () => {
 
   return (
     <div>
-      <Tooltip sx={{ mb: 1 }} title='Add Transaction'>
+      <Tooltip sx={{ my: 1 }} title='Add Transaction'>
         <IconButton
           aria-label='Add Transaction'
           onClick={() => toggleDrawer(true)}
@@ -83,24 +124,24 @@ export const AddTransaction = () => {
       </Tooltip>
       <Drawer
         anchor='right'
-        onClose={() => toggleDrawer(false)}
+        onClose={() => resetState()}
         open={open}
       >
         <Box
           role='presentation'
           sx={{ width: 300 }}
         >
-          <Typography component='h2' sx={{ m: 2 }} variant='h5'>Add Transaction</Typography>
+          <Typography component='h2' sx={{ m: 2 }} variant='h5'>{transaction ? 'Edit Transaction' : 'Add Transaction'}</Typography>
           <Divider />
           {usersQuery.loading
             ? <Box sx={{ m: 2 }}><CircularProgress /></Box>
             : (
               <OptionSelect
-                error={invalidInput && !selectedUser.value}
+                error={invalidInput && !selectedUserId}
                 label='User'
-                onSelect={setSelectedUser}
+                onSelect={setSelectedUserId}
                 options={usersQuery.data.users.map(user => ({ value: `${user.first_name} ${user.last_name}`, id: user.id }))}
-                selectedOption={selectedUser.value}
+                selectedOption={selectedUserId}
               />
             )
           }
@@ -113,11 +154,11 @@ export const AddTransaction = () => {
             ? <Box sx={{ m: 2 }}><CircularProgress /></Box>
             : (
               <OptionSelect
-                error={invalidInput && !selectedMerchant.value}
+                error={invalidInput && !selectedMerchantId}
                 label='Merchant'
-                onSelect={setSelectedMerchant}
+                onSelect={setSelectedMerchantId}
                 options={merchantsQuery.data.merchants.map(merchant => ({ value: merchant.name, id: merchant.id }))}
-                selectedOption={selectedMerchant.value}
+                selectedOption={selectedMerchantId}
               />
             )
           }
@@ -129,33 +170,60 @@ export const AddTransaction = () => {
           <AmountField
             error={invalidInput && !amount}
             onChange={event => setAmount(event.target.value)}
-            value={amount}
+            value={amount.toString()}
           />
           <Button
             onClick={() => {
-              if (!selectedUser.value || !description || !selectedMerchant.value || !selectedTransactionType || !amount) {
+              if (!selectedUserId || !description || !selectedMerchantId || !selectedTransactionType || !amount) {
                 setInvalidInput(true)
                 return
               }
 
-              createTransaction({
-                variables: {
-                  user_id: selectedUser.id,
-                  description,
-                  merchant_id: selectedMerchant.id,
-                  debit: selectedTransactionType === 'Debit',
-                  credit: selectedTransactionType === 'Credit',
-                  amount: parseFloat(amount)
-                }
-              })
+              if (transaction) {
+                updateTransaction({
+                  variables: {
+                    id: transaction.id,
+                    user_id: selectedUserId,
+                    description,
+                    merchant_id: selectedMerchantId,
+                    debit: selectedTransactionType === 'Debit',
+                    credit: selectedTransactionType === 'Credit',
+                    amount: parseFloat(amount)
+                  }
+                })
+              } else {
+                createTransaction({
+                  variables: {
+                    user_id: selectedUserId,
+                    description,
+                    merchant_id: selectedMerchantId,
+                    debit: selectedTransactionType === 'Debit',
+                    credit: selectedTransactionType === 'Credit',
+                    amount: parseFloat(amount)
+                  }
+                })
+              }
             }}
             sx={{ m: 2 }}
             variant='contained'
           >
-            Create
+            {transaction ? 'Update' : 'Create'}
           </Button>
         </Box>
       </Drawer>
     </div>
   )
+}
+
+AddTransaction.propTypes = {
+  transaction: shape({
+    id: string,
+    user_id: string,
+    description: string,
+    merchant_id: string,
+    debit: bool,
+    credit: bool,
+    amount: number
+  }),
+  setTransaction: func
 }

@@ -12,10 +12,12 @@ import Paper from '@mui/material/Paper'
 import CheckIcon from '@mui/icons-material/Check'
 import DeleteIcon from '@mui/icons-material/Delete'
 import IconButton from '@mui/material/IconButton'
+import EditIcon from '@mui/icons-material/Edit'
+import Stack from '@mui/material/Stack'
 
 const makeDataTestId = (transactionId, fieldName) => `transaction-${transactionId}-${fieldName}`
 
-export const TxTable = ({ data, onDelete }) => {
+export const TxTable = ({ data, onDelete, onEdit }) => {
   return (
     <TableContainer component={Paper}>
       <Table aria-label='transactions' sx={{ minWidth: 650 }}>
@@ -48,12 +50,20 @@ export const TxTable = ({ data, onDelete }) => {
               <TableCell align='right' data-testid={makeDataTestId(tx.id, 'credit')}>{tx.credit && <CheckIcon />}</TableCell>
               <TableCell align='right' data-testid={makeDataTestId(tx.id, 'amount')}>{tx.amount}</TableCell>
               <TableCell align='right'>
-                <IconButton
-                  aria-label='delete transaction'
-                  onClick={() => onDelete({ variables: { id: tx.id } })}
-                >
-                  <DeleteIcon />
-                </IconButton>
+                <Stack direction='row'>
+                  <IconButton
+                    aria-label='edit transaction'
+                    onClick={() => onEdit(tx)}
+                  >
+                    <EditIcon fontSize='small' />
+                  </IconButton>
+                  <IconButton
+                    aria-label='delete transaction'
+                    onClick={() => onDelete({ variables: { id: tx.id } })}
+                  >
+                    <DeleteIcon fontSize='small' />
+                  </IconButton>
+                </Stack>
               </TableCell>
             </TableRow>
           ))}
@@ -65,5 +75,6 @@ export const TxTable = ({ data, onDelete }) => {
 
 TxTable.propTypes = {
   data: arrayOf(Transaction.shape),
-  onDelete: func
+  onDelete: func,
+  onEdit: func
 }

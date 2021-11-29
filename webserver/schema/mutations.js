@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 const graphql = require('graphql')
 const mongoose = require('mongoose')
 const { GraphQLObjectType, GraphQLString, GraphQLBoolean, GraphQLFloat } = graphql
@@ -9,6 +10,8 @@ const UserType = require('./user-type')
 
 const { MerchantModel } = require('../data-models/Merchant')
 const MerchantType = require('./merchant-type')
+
+const { packageModel } = require('../query-resolvers/utils.js')
 
 const mutation = new GraphQLObjectType({
   name: 'Mutation',
@@ -23,9 +26,35 @@ const mutation = new GraphQLObjectType({
         credit: { type: GraphQLBoolean },
         amount: { type: GraphQLFloat }
       },
-      /* eslint-disable-next-line camelcase */
       resolve (parentValue, { user_id, description, merchant_id, debit, credit, amount }) {
         return (new TransactionModel({ user_id, description, merchant_id, debit, credit, amount })).save()
+      }
+    },
+    updateTransaction: {
+      type: TransactionType,
+      args: {
+        id: { type: new graphql.GraphQLNonNull(GraphQLString) },
+        user_id: { type: GraphQLString },
+        description: { type: GraphQLString },
+        merchant_id: { type: GraphQLString },
+        debit: { type: GraphQLBoolean },
+        credit: { type: GraphQLBoolean },
+        amount: { type: GraphQLFloat }
+      },
+      resolve (parentValue, { id, user_id, description, merchant_id, debit, credit, amount }) {
+        return TransactionModel.updateOne(
+          { _id: mongoose.Types.ObjectId(id) },
+          {
+            $set: {
+              ...(user_id && { user_id }),
+              ...(description && { description }),
+              ...(merchant_id && { merchant_id }),
+              ...(typeof (debit) === 'boolean' && { debit }),
+              ...(typeof (credit) === 'boolean' && { credit }),
+              ...(amount && { amount })
+            }
+          }
+        ).exec().then(() => TransactionModel.findOne({ _id: mongoose.Types.ObjectId(id) }).exec().then(transaction => packageModel(transaction)[0]))
       }
     },
     deleteTransaction: {
@@ -45,7 +74,6 @@ const mutation = new GraphQLObjectType({
         last_name: { type: GraphQLString },
         dob: { type: GraphQLString }
       },
-      // eslint-disable-next-line camelcase
       resolve (parentValue, { first_name, last_name, dob }) {
         return (new UserModel({ first_name, last_name, dob })).save()
       }

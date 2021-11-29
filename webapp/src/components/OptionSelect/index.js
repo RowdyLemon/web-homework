@@ -16,6 +16,7 @@ export const OptionSelect = ({ onSelect, options, selectedOption, label, error }
       <FormControl error={error} fullWidth>
         <InputLabel>{label}</InputLabel>
         <Select
+          data-testid={`${label}-option-select`}
           label={label}
           onChange={handleSelect}
           required

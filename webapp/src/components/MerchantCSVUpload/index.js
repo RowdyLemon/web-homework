@@ -15,11 +15,12 @@ import Typography from '@mui/material/Typography'
 export const MerchantCSVUpload = ({ onFileUpload }) => {
   return (
     <Fragment>
-      <label htmlFor='upload-user-csv'>
+      <label htmlFor='upload-merchant-csv'>
         <input
           accept='.csv'
-          id='upload-user-csv'
-          name='upload-user-csv'
+          data-testid='upload-merchant-csv'
+          id='upload-merchant-csv'
+          name='upload-merchant-csv'
           onChange={e => {
             onFileUpload(e.target.files[0])
           }}
@@ -32,7 +33,7 @@ export const MerchantCSVUpload = ({ onFileUpload }) => {
       </label>
       <Typography component='h2' mb={1} mt={3} variant='h5'>merchants.csv</Typography>
       <TableContainer component={Paper}>
-        <Table aria-label='users csv file format'>
+        <Table aria-label='merchants csv file format'>
           <TableHead>
             <TableRow>
               <TableCell>Field Name</TableCell>

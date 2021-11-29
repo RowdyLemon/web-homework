@@ -16,7 +16,7 @@ const makeDataTestId = (transactionId, fieldName) => `transaction-${transactionI
 export const TxTable = ({ data }) => {
   return (
     <TableContainer component={Paper}>
-      <Table aria-label='simple table' sx={{ minWidth: 650 }}>
+      <Table aria-label='transactions' sx={{ minWidth: 650 }}>
         <TableHead>
           <TableRow>
             <TableCell>ID</TableCell>

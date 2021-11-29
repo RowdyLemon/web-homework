@@ -3,6 +3,7 @@ import Box from '@mui/material/Box'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import Divider from '@mui/material/Divider'
 import Drawer from '@mui/material/Drawer'
+import FileUploadIcon from '@mui/icons-material/FileUpload'
 import HomeIcon from '@mui/icons-material/Home'
 import IconButton from '@mui/material/IconButton'
 import { NavLink } from 'react-router-dom'
@@ -63,6 +64,14 @@ export const Header = () => {
                   <HomeIcon />
                 </ListItemIcon>
                 <ListItemText primary='Another Route' />
+              </ListItem>
+            </NavLink>
+            <NavLink style={{ textDecoration: 'none', color: 'black' }} to='/csv_upload'>
+              <ListItem button onClick={() => setOpen(false)}>
+                <ListItemIcon>
+                  <FileUploadIcon />
+                </ListItemIcon>
+                <ListItemText primary='Upload CSV' />
               </ListItem>
             </NavLink>
           </List>

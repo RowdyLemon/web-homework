@@ -1,4 +1,4 @@
-import { arrayOf } from 'prop-types'
+import { arrayOf, func } from 'prop-types'
 import React from 'react'
 import { Transaction } from '../../gql/Transaction'
 
@@ -10,10 +10,12 @@ import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
 import CheckIcon from '@mui/icons-material/Check'
+import DeleteIcon from '@mui/icons-material/Delete'
+import IconButton from '@mui/material/IconButton'
 
 const makeDataTestId = (transactionId, fieldName) => `transaction-${transactionId}-${fieldName}`
 
-export const TxTable = ({ data }) => {
+export const TxTable = ({ data, onDelete }) => {
   return (
     <TableContainer component={Paper}>
       <Table aria-label='transactions' sx={{ minWidth: 650 }}>
@@ -26,6 +28,7 @@ export const TxTable = ({ data }) => {
             <TableCell align='right'>Debit</TableCell>
             <TableCell align='right'>Credit</TableCell>
             <TableCell align='right'>Amount</TableCell>
+            <TableCell align='right' />
           </TableRow>
         </TableHead>
         <TableBody>
@@ -44,6 +47,14 @@ export const TxTable = ({ data }) => {
               <TableCell align='right' data-testid={makeDataTestId(tx.id, 'debit')}>{tx.debit && <CheckIcon />}</TableCell>
               <TableCell align='right' data-testid={makeDataTestId(tx.id, 'credit')}>{tx.credit && <CheckIcon />}</TableCell>
               <TableCell align='right' data-testid={makeDataTestId(tx.id, 'amount')}>{tx.amount}</TableCell>
+              <TableCell align='right'>
+                <IconButton
+                  aria-label='delete transaction'
+                  onClick={() => onDelete({ variables: { id: tx.id } })}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -53,5 +64,6 @@ export const TxTable = ({ data }) => {
 }
 
 TxTable.propTypes = {
-  data: arrayOf(Transaction.shape)
+  data: arrayOf(Transaction.shape),
+  onDelete: func
 }

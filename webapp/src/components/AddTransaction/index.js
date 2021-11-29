@@ -1,6 +1,6 @@
 import AddIcon from '@mui/icons-material/Add'
 import { AlertManagerContext } from '../AlertManager'
-import CreateTransaction from '../../gql/mutations.gql'
+import { CREATE_TRANSACTION } from '../../gql/Mutations'
 import { AmountField } from '../AmountField'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
@@ -43,7 +43,7 @@ export const AddTransaction = () => {
     setInvalidInput(false)
   }
 
-  const [createTransaction] = useMutation(CreateTransaction, {
+  const [createTransaction] = useMutation(CREATE_TRANSACTION, {
     update: (cache, result) => {
       const newTransaction = result.data.addTransaction
       const transactions = JSON.parse(JSON.stringify(cache.readQuery({ query: GetTransactions })))

@@ -1,4 +1,5 @@
 const graphql = require('graphql')
+const mongoose = require('mongoose')
 const { GraphQLObjectType, GraphQLString, GraphQLBoolean, GraphQLFloat } = graphql
 const { TransactionModel } = require('../data-models/Transaction')
 const TransactionType = require('./transaction-type')
@@ -25,6 +26,16 @@ const mutation = new GraphQLObjectType({
       /* eslint-disable-next-line camelcase */
       resolve (parentValue, { user_id, description, merchant_id, debit, credit, amount }) {
         return (new TransactionModel({ user_id, description, merchant_id, debit, credit, amount })).save()
+      }
+    },
+    deleteTransaction: {
+      type: TransactionType,
+      args: {
+        id: { type: GraphQLString }
+      },
+      resolve (parentValue, { id }) {
+        TransactionModel.deleteOne({ _id: mongoose.Types.ObjectId(id) }).exec()
+        return { id: mongoose.Types.ObjectId(id) }
       }
     },
     addUser: {

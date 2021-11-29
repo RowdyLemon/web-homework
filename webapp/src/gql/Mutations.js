@@ -78,3 +78,14 @@ export const ADD_TRANSACTIONS = gql`
     }
   }
 `
+
+export const ADD_USERS = gql`
+  mutation AddUsers($users: [userInput]) {
+    addUsers(users: $users) {
+      id
+      first_name
+      last_name
+      dob
+    }
+  }
+`

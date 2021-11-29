@@ -55,7 +55,7 @@ export const AlertManager = props => {
                 <CloseIcon fontSize='inherit' />
               </IconButton>
             )}
-            severity={alertStatus}
+            severity={alertStatus || 'success'}
           >
             {alertMessage}
           </Alert>

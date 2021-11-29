@@ -1,7 +1,8 @@
-import { ADD_TRANSACTIONS } from '../gql/Mutations'
+import { ADD_TRANSACTIONS, ADD_USERS } from '../gql/Mutations'
 import { AlertManagerContext } from '../components/AlertManager'
 import Box from '@mui/material/Box'
 import GetTransactions from '../gql/transactions.gql'
+import GetUsers from '../gql/users.gql'
 import { MerchantCSVUpload } from '../components/MerchantCSVUpload'
 import React, { useState, useContext } from 'react'
 import Tab from '@mui/material/Tab'
@@ -22,14 +23,33 @@ export const CSVUpload = () => {
       const newTransactions = result.data.addTransactions
       const data = JSON.parse(JSON.stringify(cache.readQuery({ query: GetTransactions })))
 
-      data.transactions = data.transactions.concat(newTransactions)
-      cache.writeQuery({
-        query: GetTransactions,
-        data
-      })
+      if (data) {
+        data.transactions = data.transactions.concat(newTransactions)
+        cache.writeQuery({
+          query: GetTransactions,
+          data
+        })
+      }
     },
-    onCompleted: () => setOnSuccess('Successfully uploaded CSV'),
-    onError: () => setOnFailure('Failed to upload CSV')
+    onCompleted: () => setOnSuccess('Successfully uploaded transactions CSV'),
+    onError: () => setOnFailure('Failed to upload transactions CSV')
+  })
+
+  const [addUsers] = useMutation(ADD_USERS, {
+    update: (cache, result) => {
+      const newUsers = result.data.addUsers
+      const data = JSON.parse(JSON.stringify(cache.readQuery({ query: GetUsers })))
+
+      if (data) {
+        data.users = data.users.concat(newUsers)
+        cache.writeQuery({
+          query: GetUsers,
+          data
+        })
+      }
+    },
+    onCompleted: () => setOnSuccess('Successfully uploaded users CSV'),
+    onError: () => setOnFailure('Failed to upload users CSV')
   })
 
   const handleChange = (event, newValue) => {
@@ -77,6 +97,44 @@ export const CSVUpload = () => {
     reader.readAsText(file)
   }
 
+  const handleUserCSV = file => {
+    // eslint-disable-next-line no-undef
+    const reader = new FileReader()
+
+    reader.onload = e => {
+      const file = e.target.result
+      const lines = file.split(/\r\n|\n/)
+
+      if (lines[0] !== 'first_name,last_name,dob') {
+        setOnFailure('The first line of the CSV file must include the field names')
+        return
+      }
+      try {
+        const users = lines.slice(1).map(line => {
+          const input = line.split(',')
+          if (input.length !== 3) {
+            throw new Error('Each line of the CSV must include all fields')
+          }
+          return {
+            first_name: input[0],
+            last_name: input[1],
+            dob: input[2]
+          }
+        })
+        addUsers({
+          variables: {
+            users
+          }
+        })
+      } catch (err) {
+        setOnFailure(err.message)
+      }
+    }
+
+    reader.onerror = () => setOnFailure('Failed to upload CSV file, please try again later.')
+    reader.readAsText(file)
+  }
+
   return (
     <Box sx={{ width: '100%', typography: 'body1' }}>
       <TabContext value={value}>
@@ -88,7 +146,7 @@ export const CSVUpload = () => {
           </TabList>
         </Box>
         <TabPanel value='1'>
-          <UserCSVUpload />
+          <UserCSVUpload onFileUpload={handleUserCSV} />
         </TabPanel>
         <TabPanel value='2'>
           <MerchantCSVUpload />

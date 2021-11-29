@@ -1,6 +1,7 @@
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import Button from '@mui/material/Button'
+import { func } from 'prop-types'
 import Paper from '@mui/material/Paper'
 import React, { Fragment } from 'react'
 import Table from '@mui/material/Table'
@@ -11,7 +12,7 @@ import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Typography from '@mui/material/Typography'
 
-export const UserCSVUpload = () => {
+export const UserCSVUpload = ({ onFileUpload }) => {
   return (
     <Fragment>
       <label htmlFor='upload-user-csv'>
@@ -19,6 +20,9 @@ export const UserCSVUpload = () => {
           accept='.csv'
           id='upload-user-csv'
           name='upload-user-csv'
+          onChange={e => {
+            onFileUpload(e.target.files[0])
+          }}
           style={{ display: 'none' }}
           type='file'
         />
@@ -56,7 +60,7 @@ export const UserCSVUpload = () => {
                 dob
               </TableCell>
               <TableCell>text</TableCell>
-              <TableCell>The date of birth of a user. The preferred format being Month Day, Year e.g. November 21, 1988</TableCell>
+              <TableCell>The date of birth of a user. The preferred format being Year Month Day e.g. 1988 November 21</TableCell>
             </TableRow>
           </TableBody>
         </Table>
@@ -64,12 +68,16 @@ export const UserCSVUpload = () => {
       <Typography mb={1} mt={3}>Sample:</Typography>
       <Card>
         <CardContent>
-          <Typography>user_name,last_name,dob</Typography>
-          <Typography>Matthew,Lemon,&#34;November 21, 1988&#34;</Typography>
-          <Typography>Ben,Nelson,&#34;January 1, 1990&#34;</Typography>
-          <Typography>Tyler,Burraston,&#34;March 2, 1991&#34;</Typography>
+          <Typography>first_name,last_name,dob</Typography>
+          <Typography>Matthew,Lemon,1988 November 21</Typography>
+          <Typography>Ben,Nelson,1990 January 1</Typography>
+          <Typography>Tyler,Burraston,1991 March 2</Typography>
         </CardContent>
       </Card>
     </Fragment>
   )
+}
+
+UserCSVUpload.propTypes = {
+  onFileUpload: func
 }

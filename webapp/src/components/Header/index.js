@@ -13,6 +13,7 @@ import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
 import MenuIcon from '@mui/icons-material/Menu'
 import React, { Fragment, useState } from 'react'
+import SettingsIcon from '@mui/icons-material/Settings'
 import Stack from '@mui/material/Stack'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
@@ -64,6 +65,14 @@ export const Header = () => {
                   <FileUploadIcon />
                 </ListItemIcon>
                 <ListItemText primary='Upload CSV' />
+              </ListItem>
+            </NavLink>
+            <NavLink style={{ textDecoration: 'none', color: 'black' }} to='/settings'>
+              <ListItem button onClick={() => setOpen(false)}>
+                <ListItemIcon>
+                  <SettingsIcon />
+                </ListItemIcon>
+                <ListItemText primary='Settings' />
               </ListItem>
             </NavLink>
           </List>

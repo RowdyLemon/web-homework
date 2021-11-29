@@ -89,3 +89,12 @@ export const ADD_USERS = gql`
     }
   }
 `
+
+export const ADD_MERCHANTS = gql`
+  mutation AddMerchants($merchants: [merchantInput]) {
+    addMerchants(merchants: $merchants) {
+      id
+      name
+    }
+  }
+`

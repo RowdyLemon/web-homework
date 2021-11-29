@@ -1,6 +1,7 @@
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import Button from '@mui/material/Button'
+import { func } from 'prop-types'
 import Paper from '@mui/material/Paper'
 import React, { Fragment } from 'react'
 import Table from '@mui/material/Table'
@@ -11,7 +12,7 @@ import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Typography from '@mui/material/Typography'
 
-export const MerchantCSVUpload = () => {
+export const MerchantCSVUpload = ({ onFileUpload }) => {
   return (
     <Fragment>
       <label htmlFor='upload-user-csv'>
@@ -19,6 +20,9 @@ export const MerchantCSVUpload = () => {
           accept='.csv'
           id='upload-user-csv'
           name='upload-user-csv'
+          onChange={e => {
+            onFileUpload(e.target.files[0])
+          }}
           style={{ display: 'none' }}
           type='file'
         />
@@ -58,4 +62,8 @@ export const MerchantCSVUpload = () => {
       </Card>
     </Fragment>
   )
+}
+
+MerchantCSVUpload.propTypes = {
+  onFileUpload: func
 }

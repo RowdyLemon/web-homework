@@ -13,6 +13,18 @@ const MerchantType = require('./merchant-type')
 
 const { packageModel } = require('../query-resolvers/utils.js')
 
+const transactionInputType = new graphql.GraphQLInputObjectType({
+  name: 'transactionInput',
+  fields: {
+    user_id: { type: GraphQLString },
+    description: { type: GraphQLString },
+    merchant_id: { type: GraphQLString },
+    debit: { type: GraphQLBoolean },
+    credit: { type: GraphQLBoolean },
+    amount: { type: GraphQLFloat }
+  }
+})
+
 const mutation = new GraphQLObjectType({
   name: 'Mutation',
   fields: {
@@ -28,6 +40,15 @@ const mutation = new GraphQLObjectType({
       },
       resolve (parentValue, { user_id, description, merchant_id, debit, credit, amount }) {
         return (new TransactionModel({ user_id, description, merchant_id, debit, credit, amount })).save()
+      }
+    },
+    addTransactions: {
+      type: new graphql.GraphQLList(TransactionType),
+      args: {
+        transactions: { type: new graphql.GraphQLList(transactionInputType) }
+      },
+      resolve (parentValue, { transactions }) {
+        return TransactionModel.insertMany(transactions).then(result => packageModel(result))
       }
     },
     updateTransaction: {

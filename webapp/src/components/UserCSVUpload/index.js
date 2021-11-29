@@ -18,6 +18,7 @@ export const UserCSVUpload = ({ onFileUpload }) => {
       <label htmlFor='upload-user-csv'>
         <input
           accept='.csv'
+          data-testid='upload-user-csv'
           id='upload-user-csv'
           name='upload-user-csv'
           onChange={e => {

@@ -8,7 +8,7 @@ export const DescriptionField = ({ onChange, value, error }) => {
   return (
     <Box sx={{ m: 2 }}>
       <FormControl fullWidth>
-        <TextField error={error} label='Description' onChange={onChange} value={value} variant='outlined' />
+        <TextField data-testid='description-field' error={error} label='Description' onChange={onChange} value={value} variant='outlined' />
       </FormControl>
     </Box>
   )

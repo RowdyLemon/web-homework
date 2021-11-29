@@ -64,3 +64,17 @@ export const UPDATE_TRANSACTION = gql`
     }
   }
 `
+
+export const ADD_TRANSACTIONS = gql`
+  mutation AddTransactions($transactions: [transactionInput]) {
+    addTransactions(transactions: $transactions) {
+      id
+      user_id
+      description
+      merchant_id
+      debit
+      credit
+      amount
+    }
+  }
+`

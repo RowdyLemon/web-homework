@@ -1,0 +1,4 @@
+user_id,description,merchant_id,debit,credit,amount
+61a3bafdfc3e58721701209f,food,61a3b5fbe093256940c35aa7,true,false,88.45
+61a3bafdfc3e58721701209f,stuff,61a3b4bae093256940c35aa6,false,true,1337.00
+61a3bb72fc3e5872170120a0,things,61a3b4bae093256940c35aa6,false,true,532.99

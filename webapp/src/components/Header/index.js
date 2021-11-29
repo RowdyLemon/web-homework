@@ -58,14 +58,6 @@ export const Header = () => {
                 <ListItemText primary='Home' />
               </ListItem>
             </NavLink>
-            <NavLink style={{ textDecoration: 'none', color: 'black' }} to='/another'>
-              <ListItem button onClick={() => setOpen(false)}>
-                <ListItemIcon>
-                  <HomeIcon />
-                </ListItemIcon>
-                <ListItemText primary='Another Route' />
-              </ListItem>
-            </NavLink>
             <NavLink style={{ textDecoration: 'none', color: 'black' }} to='/csv_upload'>
               <ListItem button onClick={() => setOpen(false)}>
                 <ListItemIcon>

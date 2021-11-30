@@ -104,6 +104,27 @@ const mutation = new GraphQLObjectType({
         return { id: mongoose.Types.ObjectId(id) }
       }
     },
+    updateUser: {
+      type: UserType,
+      args: {
+        id: { type: new graphql.GraphQLNonNull(GraphQLString) },
+        first_name: { type: GraphQLString },
+        last_name: { type: GraphQLString },
+        dob: { type: GraphQLString }
+      },
+      resolve (parentValue, { id, first_name, last_name, dob }) {
+        return UserModel.updateOne(
+          { _id: mongoose.Types.ObjectId(id) },
+          {
+            $set: {
+              ...(first_name && { first_name }),
+              ...(last_name && { last_name }),
+              ...(dob && { dob })
+            }
+          }
+        ).exec().then(() => UserModel.findOne({ _id: mongoose.Types.ObjectId(id) }).exec().then(user => packageModel(user)[0]))
+      }
+    },
     addUser: {
       type: UserType,
       args: {

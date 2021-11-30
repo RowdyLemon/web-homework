@@ -12,6 +12,7 @@ import ListItem from '@mui/material/ListItem'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
 import MenuIcon from '@mui/icons-material/Menu'
+import PeopleIcon from '@mui/icons-material/People'
 import React, { Fragment, useState } from 'react'
 import SettingsIcon from '@mui/icons-material/Settings'
 import Stack from '@mui/material/Stack'
@@ -57,6 +58,14 @@ export const Header = () => {
                   <HomeIcon />
                 </ListItemIcon>
                 <ListItemText primary='Home' />
+              </ListItem>
+            </NavLink>
+            <NavLink style={{ textDecoration: 'none', color: 'black' }} to='/users'>
+              <ListItem button onClick={() => setOpen(false)}>
+                <ListItemIcon>
+                  <PeopleIcon />
+                </ListItemIcon>
+                <ListItemText primary='Users' />
               </ListItem>
             </NavLink>
             <NavLink style={{ textDecoration: 'none', color: 'black' }} to='/csv_upload'>

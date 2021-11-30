@@ -7,6 +7,7 @@ import { Home } from './home'
 import React from 'react'
 import { Settings } from './settings'
 import { SettingsManager } from './components/SettingsManager'
+import { Users } from './users'
 
 function AppRouter () {
   return (
@@ -16,7 +17,7 @@ function AppRouter () {
         <AlertManager>
           <SettingsManager>
             <Route component={Home} exact path='/' />
-            <Route component={() => (<div>Content for /another route</div>)} exact path='/another' />
+            <Route component={Users} exact path='/users' />
             <Route component={CSVUpload} exact path='/csv_upload' />
             <Route component={Settings} exact path='/settings' />
           </SettingsManager>

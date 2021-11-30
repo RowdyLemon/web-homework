@@ -16,6 +16,14 @@ export const DELETE_USER = gql`
   }
 `
 
+export const DELETE_MERCHANT = gql`
+  mutation DeleteMerchant($id: String) {
+    deleteMerchant(id: $id) {
+      id
+    }
+  }
+`
+
 export const CREATE_TRANSACTION = gql`
   mutation CreateTransaction(
     $user_id: String

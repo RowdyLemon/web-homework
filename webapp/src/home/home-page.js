@@ -6,6 +6,7 @@ import GetTransactions from '../gql/transactions.gql'
 import { TxTable } from '../components/transactions/TxTable'
 import { AddTransaction } from '../components/AddTransaction'
 import { DELETE_TRANSACTION } from '../gql/Mutations'
+import Typography from '@mui/material/Typography'
 
 export function Home () {
   const { setOnFailure, setOnSuccess } = useContext(AlertManagerContext)
@@ -39,6 +40,7 @@ export function Home () {
 
   return (
     <Fragment>
+      <Typography component='h1' variant='h4'>Transactions</Typography>
       <AddTransaction setTransaction={setEditTransaction} transaction={editTransaction} />
       <TxTable
         data={data.transactions}

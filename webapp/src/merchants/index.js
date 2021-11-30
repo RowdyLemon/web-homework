@@ -2,7 +2,8 @@ import { AlertManagerContext } from '../components/AlertManager'
 import CircularProgress from '@mui/material/CircularProgress'
 import GetMerchants from '../gql/merchants.gql'
 import { MerchantsTable } from '../components/MerchantsTable'
-import React, { useContext } from 'react'
+import React, { Fragment, useContext } from 'react'
+import Typography from '@mui/material/Typography'
 import { useQuery } from '@apollo/client'
 
 export const Merchants = () => {
@@ -20,6 +21,9 @@ export const Merchants = () => {
   }
 
   return (
-    <MerchantsTable data={data.merchants} />
+    <Fragment>
+      <Typography component='h1' variant='h4'>Merchants</Typography>
+      <MerchantsTable data={data.merchants} />
+    </Fragment>
   )
 }

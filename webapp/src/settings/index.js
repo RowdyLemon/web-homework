@@ -10,7 +10,7 @@ export const Settings = () => {
 
   return (
     <Fragment>
-      <Typography component='h2' sx={{ my: 2 }} variant='h5'>Romanize Settings</Typography>
+      <Typography component='h1' sx={{ my: 2 }} variant='h4'>Romanize Settings</Typography>
       <Typography sx={{ my: 2 }}>Conversts transaction amounts to roman numerals</Typography>
       <FormGroup>
         <FormControlLabel

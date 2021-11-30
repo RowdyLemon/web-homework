@@ -4,6 +4,7 @@ import CircularProgress from '@mui/material/CircularProgress'
 import { DELETE_USER } from '../gql/Mutations'
 import GetUsers from '../gql/users.gql'
 import React, { Fragment, useContext, useState } from 'react'
+import Typography from '@mui/material/Typography'
 import { useQuery, useMutation } from '@apollo/client'
 import { UsersTable } from '../components/UsersTable'
 
@@ -40,6 +41,7 @@ export const Users = () => {
 
   return (
     <Fragment>
+      <Typography component='h1' variant='h4'>Users</Typography>
       <AddUser setUser={setEditUser} user={editUser} />
       <UsersTable data={data.users} onDelete={deleteUser} onEdit={setEditUser} />
     </Fragment>

@@ -1,8 +1,9 @@
+import Button from '@mui/material/Button'
 import coronavirusImage from './coronavirus.png'
 import { EnemySpawner, PowerUpSpawner } from './spawners'
 import ParticleFactory from './explodingParticle'
 import PlayerShip from './playerShip'
-import React from 'react'
+import React, { Fragment } from 'react'
 import shipImage from './ship.png'
 import syringeImage from './syringe.png'
 import tpImage from './tp.png'
@@ -12,7 +13,8 @@ const CANVAS_HEIGHT = 307
 
 class CoronaBusters extends React.Component {
   state = {
-    score: 0
+    score: 0,
+    inProgress: false
   }
 
   async componentDidMount () {
@@ -32,7 +34,7 @@ class CoronaBusters extends React.Component {
   }
 
   startGame () {
-    document.removeEventListener('keydown', this.handleStartGameEvent)
+    this.setState({ inProgress: true })
     this.setState({ score: 0 })
     this.player = new PlayerShip(this.playerShipImg, this.syringeImg, CANVAS_WIDTH, CANVAS_HEIGHT)
 
@@ -73,19 +75,9 @@ class CoronaBusters extends React.Component {
       CANVAS_HEIGHT / 2
     )
 
-    this.drawText(
-      ctx,
-      "Press 'space' to start over",
-      1,
-      '18px sans-serif',
-      CANVAS_WIDTH / 2,
-      CANVAS_HEIGHT / 2 + 40
-    )
-
     // eslint-disable-next-line react/prop-types
     this.props.onNewScore(this.state.score)
-
-    document.addEventListener('keydown', this.handleStartGameEvent)
+    this.setState({ inProgress: false })
   }
 
   drawText (ctx, text, shadowOffset, font, x, y) {
@@ -221,39 +213,44 @@ class CoronaBusters extends React.Component {
 
   render () {
     return (
-      <div
-        className='not_found_page_game_root'
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center'
-        }}
-      >
+      <Fragment>
         <div
+          className='not_found_page_game_root'
           style={{
-            fontSize: '20px',
-            padding: '4px',
             display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'flex-end',
-            justifyContent: 'flex-end'
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center'
           }}
         >
-          <div>{`Score: ${this.state.score}`}</div>
+          <div
+            style={{
+              fontSize: '20px',
+              padding: '4px',
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'flex-end',
+              justifyContent: 'flex-end'
+            }}
+          >
+            <div>{`Score: ${this.state.score}`}</div>
+          </div>
+          <canvas
+            className='game_canvas'
+            height={CANVAS_HEIGHT}
+            ref={this.setCanvasRef}
+            style={{
+              border: '2px',
+              borderStyle: 'solid',
+              borderColor: '#394B58'
+            }}
+            width={CANVAS_WIDTH}
+          />
         </div>
-        <canvas
-          className='game_canvas'
-          height={CANVAS_HEIGHT}
-          ref={this.setCanvasRef}
-          style={{
-            border: '2px',
-            borderStyle: 'solid',
-            borderColor: '#394B58'
-          }}
-          width={CANVAS_WIDTH}
-        />
-      </div>
+        <Button disabled={this.state.inProgress} onClick={() => this.startGame()} sx={{ my: 2 }} variant='contained'>
+          Start Game
+        </Button>
+      </Fragment>
     )
   }
 }

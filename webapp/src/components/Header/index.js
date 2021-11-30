@@ -19,6 +19,7 @@ import Stack from '@mui/material/Stack'
 import StorefrontIcon from '@mui/icons-material/Storefront'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
+import VideogameAssetIcon from '@mui/icons-material/VideogameAsset'
 
 export const Header = () => {
   const [open, setOpen] = useState(false)
@@ -83,6 +84,14 @@ export const Header = () => {
                   <FileUploadIcon />
                 </ListItemIcon>
                 <ListItemText primary='Upload CSV' />
+              </ListItem>
+            </NavLink>
+            <NavLink style={{ textDecoration: 'none', color: 'black' }} to='/game'>
+              <ListItem button onClick={() => setOpen(false)}>
+                <ListItemIcon>
+                  <VideogameAssetIcon />
+                </ListItemIcon>
+                <ListItemText primary='Corona Busters' />
               </ListItem>
             </NavLink>
             <NavLink style={{ textDecoration: 'none', color: 'black' }} to='/settings'>

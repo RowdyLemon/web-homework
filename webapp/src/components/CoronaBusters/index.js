@@ -22,7 +22,7 @@ class CoronaBusters extends React.Component {
     this.tpImg = await this.loadImage(tpImage)
     this.particleFactory = new ParticleFactory()
 
-    document.addEventListener('keydown', this.handleStartGameEvent)
+    this.startGame()
   }
 
   handleStartGameEvent = event => {

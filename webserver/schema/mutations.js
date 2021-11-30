@@ -172,6 +172,33 @@ const mutation = new GraphQLObjectType({
       resolve (parentValue, { merchants }) {
         return MerchantModel.insertMany(merchants).then(result => packageModel(result))
       }
+    },
+    deleteMerchant: {
+      type: MerchantType,
+      args: {
+        id: { type: GraphQLString }
+      },
+      resolve (parentValue, { id }) {
+        MerchantModel.deleteOne({ _id: mongoose.Types.ObjectId(id) }).exec()
+        return { id: mongoose.Types.ObjectId(id) }
+      }
+    },
+    updateMerchant: {
+      type: MerchantType,
+      args: {
+        id: { type: new graphql.GraphQLNonNull(GraphQLString) },
+        name: { types: GraphQLString }
+      },
+      resolve (parentValue, { id, name }) {
+        return MerchantModel.updateOne(
+          { _id: mongoose.Types.ObjectId(id) },
+          {
+            $set: {
+              ...(name && { name })
+            }
+          }
+        ).exec().then(() => MerchantModel.findOne({ _id: mongoose.Types.ObjectId(id) }).exec().then(user => packageModel(user)[0]))
+      }
     }
   }
 })

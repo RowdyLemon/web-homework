@@ -1,23 +1,39 @@
 import FormControlLabel from '@mui/material/FormControlLabel'
 import FormGroup from '@mui/material/FormGroup'
-import React, { useContext } from 'react'
+import React, { Fragment, useContext } from 'react'
 import { SettingsManagerContext } from '../components/SettingsManager'
 import Switch from '@mui/material/Switch'
+import Typography from '@mui/material/Typography'
 
 export const Settings = () => {
-  const { romanize, setRomanizeSetting } = useContext(SettingsManagerContext)
+  const { romanizeAdditive, setRomanizeAdditiveSetting, romanize, setRomanizeSetting } = useContext(SettingsManagerContext)
 
   return (
-    <FormGroup>
-      <FormControlLabel
-        control={(
-          <Switch
-            checked={romanize}
-            onChange={event => setRomanizeSetting(event.target.checked)}
-          />
-        )}
-        label='Romanize (converts numbers to roman numerals)'
-      />
-    </FormGroup>
+    <Fragment>
+      <Typography component='h2' sx={{ my: 2 }} variant='h5'>Romanize Settings</Typography>
+      <Typography sx={{ my: 2 }}>Conversts transaction amounts to roman numerals</Typography>
+      <FormGroup>
+        <FormControlLabel
+          control={(
+            <Switch
+              checked={romanize}
+              onChange={event => setRomanizeSetting(event.target.checked)}
+            />
+          )}
+          disabled={romanizeAdditive}
+          label='Traditional (e.g. 19 would be XIX)'
+        />
+        <FormControlLabel
+          control={(
+            <Switch
+              checked={romanizeAdditive}
+              onChange={event => setRomanizeAdditiveSetting(event.target.checked)}
+            />
+          )}
+          disabled={romanize}
+          label='Additive (e.g. 19 would be XVIIII)'
+        />
+      </FormGroup>
+    </Fragment>
   )
 }

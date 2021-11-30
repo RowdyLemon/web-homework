@@ -5,7 +5,7 @@ import EditIcon from '@mui/icons-material/Edit'
 import IconButton from '@mui/material/IconButton'
 import Paper from '@mui/material/Paper'
 import React, { useContext } from 'react'
-import { romanizeNumber } from '../../utils'
+import { romanizeNumberAdditive, romanizeNumber } from '../../utils'
 import { SettingsManagerContext } from '../SettingsManager'
 import Stack from '@mui/material/Stack'
 import Table from '@mui/material/Table'
@@ -19,7 +19,17 @@ import { Transaction } from '../../gql/Transaction'
 const makeDataTestId = (transactionId, fieldName) => `transaction-${transactionId}-${fieldName}`
 
 export const TxTable = ({ data, onDelete, onEdit }) => {
-  const { romanize } = useContext(SettingsManagerContext)
+  const { romanizeAdditive, romanize } = useContext(SettingsManagerContext)
+
+  const getAmount = amount => {
+    if (romanize) {
+      return romanizeNumber(amount)
+    }
+    if (romanizeAdditive) {
+      return romanizeNumberAdditive(amount)
+    }
+    return amount
+  }
 
   return (
     <TableContainer component={Paper}>
@@ -51,7 +61,7 @@ export const TxTable = ({ data, onDelete, onEdit }) => {
               <TableCell align='right' data-testid={makeDataTestId(tx.id, 'merchant')}>{tx.merchant_id}</TableCell>
               <TableCell align='right' data-testid={makeDataTestId(tx.id, 'debit')}>{tx.debit && <CheckIcon />}</TableCell>
               <TableCell align='right' data-testid={makeDataTestId(tx.id, 'credit')}>{tx.credit && <CheckIcon />}</TableCell>
-              <TableCell align='right' data-testid={makeDataTestId(tx.id, 'amount')}>{romanize ? romanizeNumber(tx.amount) : tx.amount}</TableCell>
+              <TableCell align='right' data-testid={makeDataTestId(tx.id, 'amount')}>{getAmount(tx.amount)}</TableCell>
               <TableCell align='right'>
                 <Stack direction='row'>
                   <IconButton

@@ -7,7 +7,7 @@ import { bool, func, number, shape, string } from 'prop-types'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import CircularProgress from '@mui/material/CircularProgress'
-import { DescriptionField } from '../DescriptionField'
+import { TextInputField } from '../TextInputField'
 import Divider from '@mui/material/Divider'
 import Drawer from '@mui/material/Drawer'
 import GetMerchants from '../../gql/merchants.gql'
@@ -145,8 +145,9 @@ export const AddTransaction = ({ transaction, setTransaction }) => {
               />
             )
           }
-          <DescriptionField
+          <TextInputField
             error={invalidInput && !description}
+            label='Description'
             onChange={event => setDescription(event.target.value)}
             value={description}
           />

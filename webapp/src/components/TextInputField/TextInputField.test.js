@@ -1,6 +1,6 @@
 import React from 'react'
 import { fireEvent, render } from '@testing-library/react'
-import { DescriptionField } from '.'
+import { TextInputField } from '.'
 
 const makeProps = overrides => ({
   onChange: jest.fn(),
@@ -9,7 +9,7 @@ const makeProps = overrides => ({
 })
 
 const setup = props => {
-  return render(<DescriptionField {...props} />)
+  return render(<TextInputField {...props} />)
 }
 
 describe('Description Field', () => {

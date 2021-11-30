@@ -98,3 +98,22 @@ export const ADD_MERCHANTS = gql`
     }
   }
 `
+
+export const ADD_USER = gql`
+  mutation AddUser(
+    $first_name: String,
+    $last_name: String,
+    $dob: String
+  ) {
+    addUser(
+      first_name: $first_name,
+      last_name: $last_name,
+      dob: $dob
+    ) {
+      id
+      first_name
+      last_name
+      dob
+    }
+  }
+`

@@ -4,18 +4,19 @@ import FormControl from '@mui/material/FormControl'
 import TextField from '@mui/material/TextField'
 import { bool, func, string } from 'prop-types'
 
-export const DescriptionField = ({ onChange, value, error }) => {
+export const TextInputField = ({ onChange, value, error, label }) => {
   return (
     <Box sx={{ m: 2 }}>
       <FormControl fullWidth>
-        <TextField data-testid='description-field' error={error} label='Description' onChange={onChange} value={value} variant='outlined' />
+        <TextField data-testid='description-field' error={error} label={label} onChange={onChange} value={value} variant='outlined' />
       </FormControl>
     </Box>
   )
 }
 
-DescriptionField.propTypes = {
+TextInputField.propTypes = {
   onChange: func,
   value: string,
-  error: bool
+  error: bool,
+  label: string
 }

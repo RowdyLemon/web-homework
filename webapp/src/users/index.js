@@ -1,7 +1,8 @@
+import { AddUser } from '../components/AddUser'
 import { AlertManagerContext } from '../components/AlertManager'
 import CircularProgress from '@mui/material/CircularProgress'
 import GetUsers from '../gql/users.gql'
-import React, { useContext } from 'react'
+import React, { Fragment, useContext } from 'react'
 import { useQuery } from '@apollo/client'
 import { UsersTable } from '../components/UsersTable'
 
@@ -20,6 +21,9 @@ export const Users = () => {
   }
 
   return (
-    <UsersTable data={data.users} />
+    <Fragment>
+      <AddUser />
+      <UsersTable data={data.users} />
+    </Fragment>
   )
 }

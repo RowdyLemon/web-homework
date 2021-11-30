@@ -4,6 +4,7 @@ import { css } from '@emotion/core'
 import { CSVUpload } from './csv_upload'
 import { Header } from './components/Header'
 import { Home } from './home'
+import { Merchants } from './merchants'
 import React from 'react'
 import { Settings } from './settings'
 import { SettingsManager } from './components/SettingsManager'
@@ -18,6 +19,7 @@ function AppRouter () {
           <SettingsManager>
             <Route component={Home} exact path='/' />
             <Route component={Users} exact path='/users' />
+            <Route component={Merchants} exact path='/merchants' />
             <Route component={CSVUpload} exact path='/csv_upload' />
             <Route component={Settings} exact path='/settings' />
           </SettingsManager>

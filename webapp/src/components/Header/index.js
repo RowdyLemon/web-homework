@@ -4,7 +4,6 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import Divider from '@mui/material/Divider'
 import Drawer from '@mui/material/Drawer'
 import FileUploadIcon from '@mui/icons-material/FileUpload'
-import HomeIcon from '@mui/icons-material/Home'
 import IconButton from '@mui/material/IconButton'
 import { NavLink } from 'react-router-dom'
 import List from '@mui/material/List'
@@ -12,10 +11,12 @@ import ListItem from '@mui/material/ListItem'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
 import MenuIcon from '@mui/icons-material/Menu'
+import PaidIcon from '@mui/icons-material/Paid'
 import PeopleIcon from '@mui/icons-material/People'
 import React, { Fragment, useState } from 'react'
 import SettingsIcon from '@mui/icons-material/Settings'
 import Stack from '@mui/material/Stack'
+import StorefrontIcon from '@mui/icons-material/Storefront'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
 
@@ -55,9 +56,9 @@ export const Header = () => {
             <NavLink style={{ textDecoration: 'none', color: 'black' }} to='/'>
               <ListItem button onClick={() => setOpen(false)}>
                 <ListItemIcon>
-                  <HomeIcon />
+                  <PaidIcon />
                 </ListItemIcon>
-                <ListItemText primary='Home' />
+                <ListItemText primary='Transactions' />
               </ListItem>
             </NavLink>
             <NavLink style={{ textDecoration: 'none', color: 'black' }} to='/users'>
@@ -66,6 +67,14 @@ export const Header = () => {
                   <PeopleIcon />
                 </ListItemIcon>
                 <ListItemText primary='Users' />
+              </ListItem>
+            </NavLink>
+            <NavLink style={{ textDecoration: 'none', color: 'black' }} to='/merchants'>
+              <ListItem button onClick={() => setOpen(false)}>
+                <ListItemIcon>
+                  <StorefrontIcon />
+                </ListItemIcon>
+                <ListItemText primary='Merchants' />
               </ListItem>
             </NavLink>
             <NavLink style={{ textDecoration: 'none', color: 'black' }} to='/csv_upload'>

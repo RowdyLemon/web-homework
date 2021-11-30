@@ -124,6 +124,16 @@ const mutation = new GraphQLObjectType({
         return UserModel.insertMany(users).then(result => packageModel(result))
       }
     },
+    deleteUser: {
+      type: UserType,
+      args: {
+        id: { type: GraphQLString }
+      },
+      resolve (parentValue, { id }) {
+        UserModel.deleteOne({ _id: mongoose.Types.ObjectId(id) }).exec()
+        return { id: mongoose.Types.ObjectId(id) }
+      }
+    },
     addMerchant: {
       type: MerchantType,
       args: {

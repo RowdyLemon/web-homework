@@ -154,3 +154,12 @@ export const ADD_USER = gql`
     }
   }
 `
+
+export const ADD_MERCHANT = gql`
+  mutation AddMerchant($name: String) {
+    addMerchant(name: $name) {
+      id
+      name
+    }
+  }
+`

@@ -161,7 +161,7 @@ const mutation = new GraphQLObjectType({
         name: { type: GraphQLString }
       },
       resolve (parentValue, { name }) {
-        return (new MerchantModel({ name })).save()
+        return (new MerchantModel({ name })).save().then(result => packageModel(result)[0])
       }
     },
     addMerchants: {

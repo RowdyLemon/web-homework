@@ -1,3 +1,4 @@
+import { AddMerchant } from '../components/AddMerchant'
 import { AlertManagerContext } from '../components/AlertManager'
 import CircularProgress from '@mui/material/CircularProgress'
 import { DELETE_MERCHANT } from '../gql/Mutations'
@@ -39,6 +40,7 @@ export const Merchants = () => {
   return (
     <Fragment>
       <Typography component='h1' variant='h4'>Merchants</Typography>
+      <AddMerchant />
       <MerchantsTable data={data.merchants} onDelete={deleteMerchant} />
     </Fragment>
   )

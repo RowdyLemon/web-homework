@@ -1,8 +1,10 @@
 import { arrayOf, func, shape, string } from 'prop-types'
 import DeleteIcon from '@mui/icons-material/Delete'
+import EditIcon from '@mui/icons-material/Edit'
 import IconButton from '@mui/material/IconButton'
 import Paper from '@mui/material/Paper'
 import React from 'react'
+import Stack from '@mui/material/Stack'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
@@ -10,7 +12,7 @@ import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 
-export const MerchantsTable = ({ data, onDelete }) => {
+export const MerchantsTable = ({ data, onDelete, onEdit }) => {
   return (
     <TableContainer component={Paper}>
       <Table aria-label='merchants'>
@@ -31,12 +33,20 @@ export const MerchantsTable = ({ data, onDelete }) => {
               <TableCell component='th' scope='row'>{merchant.id}</TableCell>
               <TableCell align='right'>{merchant.name}</TableCell>
               <TableCell align='right'>
-                <IconButton
-                  aria-label='delete transaction'
-                  onClick={() => onDelete({ variables: { id: merchant.id } })}
-                >
-                  <DeleteIcon fontSize='small' />
-                </IconButton>
+                <Stack direction='row' justifyContent='end'>
+                  <IconButton
+                    aria-label='edit transaction'
+                    onClick={() => onEdit(merchant)}
+                  >
+                    <EditIcon fontSize='small' />
+                  </IconButton>
+                  <IconButton
+                    aria-label='delete transaction'
+                    onClick={() => onDelete({ variables: { id: merchant.id } })}
+                  >
+                    <DeleteIcon fontSize='small' />
+                  </IconButton>
+                </Stack>
               </TableCell>
             </TableRow>
           ))}
@@ -51,5 +61,6 @@ MerchantsTable.propTypes = {
     id: string,
     name: string
   })),
-  onDelete: func
+  onDelete: func,
+  onEdit: func
 }

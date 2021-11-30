@@ -4,12 +4,14 @@ import CircularProgress from '@mui/material/CircularProgress'
 import { DELETE_MERCHANT } from '../gql/Mutations'
 import GetMerchants from '../gql/merchants.gql'
 import { MerchantsTable } from '../components/MerchantsTable'
-import React, { Fragment, useContext } from 'react'
+import React, { Fragment, useContext, useState } from 'react'
 import Typography from '@mui/material/Typography'
 import { useQuery, useMutation } from '@apollo/client'
 
 export const Merchants = () => {
   const { setOnFailure, setOnSuccess } = useContext(AlertManagerContext)
+
+  const [editMerchant, setEditMerchant] = useState(null)
 
   const [deleteMerchant] = useMutation(DELETE_MERCHANT, {
     update: (cache, result) => {
@@ -40,8 +42,8 @@ export const Merchants = () => {
   return (
     <Fragment>
       <Typography component='h1' variant='h4'>Merchants</Typography>
-      <AddMerchant />
-      <MerchantsTable data={data.merchants} onDelete={deleteMerchant} />
+      <AddMerchant merchant={editMerchant} setMerchant={setEditMerchant} />
+      <MerchantsTable data={data.merchants} onDelete={deleteMerchant} onEdit={setEditMerchant} />
     </Fragment>
   )
 }

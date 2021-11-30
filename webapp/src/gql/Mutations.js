@@ -102,6 +102,15 @@ export const UPDATE_USER = gql`
   }
 `
 
+export const UPDATE_MERCHANT = gql`
+  mutation UpdateMerchant($id: String!, $name: String) {
+    updateMerchant(id: $id, name: $name) {
+      id
+      name
+    }
+  }
+`
+
 export const ADD_TRANSACTIONS = gql`
   mutation AddTransactions($transactions: [transactionInput]) {
     addTransactions(transactions: $transactions) {

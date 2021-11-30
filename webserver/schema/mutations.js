@@ -133,7 +133,7 @@ const mutation = new GraphQLObjectType({
         dob: { type: GraphQLString }
       },
       resolve (parentValue, { first_name, last_name, dob }) {
-        return (new UserModel({ first_name, last_name, dob })).save()
+        return (new UserModel({ first_name, last_name, dob })).save().then(result => packageModel(result)[0])
       }
     },
     addUsers: {

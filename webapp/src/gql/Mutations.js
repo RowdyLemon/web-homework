@@ -73,6 +73,27 @@ export const UPDATE_TRANSACTION = gql`
   }
 `
 
+export const UPDATE_USER = gql`
+  mutation UpdateUser(
+    $id: String!
+    $first_name: String
+    $last_name: String
+    $dob: String
+  ) {
+    updateUser(
+      id: $id
+      first_name: $first_name
+      last_name: $last_name
+      dob: $dob
+    ) {
+      id
+      first_name
+      last_name
+      dob
+    }
+  }
+`
+
 export const ADD_TRANSACTIONS = gql`
   mutation AddTransactions($transactions: [transactionInput]) {
     addTransactions(transactions: $transactions) {

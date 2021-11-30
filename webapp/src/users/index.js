@@ -3,12 +3,14 @@ import { AlertManagerContext } from '../components/AlertManager'
 import CircularProgress from '@mui/material/CircularProgress'
 import { DELETE_USER } from '../gql/Mutations'
 import GetUsers from '../gql/users.gql'
-import React, { Fragment, useContext } from 'react'
+import React, { Fragment, useContext, useState } from 'react'
 import { useQuery, useMutation } from '@apollo/client'
 import { UsersTable } from '../components/UsersTable'
 
 export const Users = () => {
   const { setOnFailure, setOnSuccess } = useContext(AlertManagerContext)
+
+  const [editUser, setEditUser] = useState(null)
 
   const [deleteUser] = useMutation(DELETE_USER, {
     update: (cache, result) => {
@@ -38,8 +40,8 @@ export const Users = () => {
 
   return (
     <Fragment>
-      <AddUser />
-      <UsersTable data={data.users} onDelete={deleteUser} />
+      <AddUser setUser={setEditUser} user={editUser} />
+      <UsersTable data={data.users} onDelete={deleteUser} onEdit={setEditUser} />
     </Fragment>
   )
 }
